@@ -1,6 +1,6 @@
 # Planning Functions for Robot Manipulation with Twin Palms
 
-This repo contains a Python library to plan robot manipulation primitives: pushing, pulling, levering, and grasping. This repo is adapting from [Mpalms Repo](https://github.com/mcubelab/mpalms), which contains the full planning + feedback pipeline for the tactile dexterity project.
+This repo contains a Python library to plan robot manipulation primitives for the yumi robot equipped with two palms. This repo is adapting from [Mpalms Repo](https://github.com/mcubelab/mpalms), which contains the full planning + feedback pipeline for the tactile dexterity project.
 
 ## Dependencies
 
@@ -51,5 +51,5 @@ Main pulling primitive function. Return a plan (list of dictionaries) that conta
         :param t: (util.PoseStamped) list of timestamps associated with each pose
         :param N: (util.PoseStamped) Number of keypoints in the plan (i.e., len(plan_dict['t'])
         
-Note: All poses are expressed using the custom data type PoseStamped defined in 'helper/util.py'. This is to keep compatibility with rospy. 
+Note: All poses are expressed using the custom data type PoseStamped defined in 'helper/util.py'. This is to keep compatibility with rospy. Videos of the example simulations are provided in ''
    
