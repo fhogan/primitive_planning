@@ -26,7 +26,7 @@ Note: These instructions were tested on Ubuntu 16.04.
 
 There are 4 primitive functions implemented: pushing, pulling, levering, and grasping. All are defined in the function 'planning.py'. Here is an example of how to call a primitive:
 
-    'manipulated_object = None
+    manipulated_object = None
     object_pose1_world = util.list2pose_stamped([0.3, -0.2, 0.02, 0, 0, 0.17365,0.98481])
     object_pose2_world = util.list2pose_stamped([0.4, .1, 0.02, 0, 0, 0.17365,0.98481])
     palm_pose_r_object = util.list2pose_stamped([0.0, -0.07997008425912933, 0.024995790000000007, 1.0000000000000002, -4.163336342344336e-17, 0.0, 0.0])
@@ -37,4 +37,4 @@ There are 4 primitive functions implemented: pushing, pulling, levering, and gra
                                        object_pose2_world=object_pose2_world,
                                        palm_pose_l_object=palm_pose_l_object,
                                        palm_pose_r_object=palm_pose_r_object,
-                                       arm='r')'
+                                       arm='r')
