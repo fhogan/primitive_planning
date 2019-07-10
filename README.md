@@ -40,13 +40,8 @@ There are 4 primitive functions implemented: pushing, pulling, levering, and gra
 
 
 Note that manipulated_object = None as no information about the object properties is used to develop the plan. At this point, only the primitive 'levering' uses object information to check collisions between the object and the table. The primitive functions return a dictionary detailed the trajectory of the object and the palms:
-Main pulling primitive function. Return a plan that contains the pose trajectories of the object and palms to achieve desired object reconfiguration.
-'
-    :param object: (collisions.CollisionBody) that contains the geometry of the object. (Not currently used)
-    :param object_pose1_world: (util.PoseStamped) Initial object pose in world frame.
-    :param object_pose2_world: (util.PoseStamped) Final object pose in world frame.
-    :param palm_pose_l_object: (util.PoseStamped) Left palm pose in object frame.
-    :param palm_pose_r_object: (util.PoseStamped) Right palm pose in object frame.
+Main pulling primitive function. Return a plan (list of dictionaries) that contains the pose trajectories of the object and palms to achieve desired object reconfiguration.
+
     :return: plan_list: (list of dict with keys)
         :param palm_poses_r_world: (list of util.PoseStamped) Trajectory of right palm poses in world frame
         :param palm_poses_l_world: (list of util.PoseStamped) Trajectory of left palm poses in world frame
@@ -54,5 +49,5 @@ Main pulling primitive function. Return a plan that contains the pose trajectori
         :param primitive: (util.PoseStamped) Name of primitive (i.e., 'grasping')
         :param name: (util.PoseStamped) Name of plan
         :param t: (util.PoseStamped) list of timestamps associated with each pose
-        :param N: (util.PoseStamped) Number of keypoints in the plan (i.e., len(plan_dict['t'])'
+        :param N: (util.PoseStamped) Number of keypoints in the plan (i.e., len(plan_dict['t'])
    
