@@ -39,7 +39,7 @@ There are 4 primitive functions implemented: pushing, pulling, levering, and gra
                                      arm='r')
 
 
-Note that manipulated_object = None as no information about the object properties is used to develop the plan. At this point, only the primitive 'levering' uses object information to check collisions between the object and the table. The primitive functions return a dictionary detailed the trajectory of the object and the palms:
+All primitives assume an initial contact between the gripper and the object. Note that manipulated_object = None as no information about the object properties is used to develop the plan. At this point, only the primitive 'levering' uses object information to check collisions between the object and the table. The primitive functions return a dictionary detailed the trajectory of the object and the palms:
 Main pulling primitive function. Return a plan (list of dictionaries) that contains the pose trajectories of the object and palms to achieve desired object reconfiguration.
 
     :return: plan_list: (list of dict with keys)
