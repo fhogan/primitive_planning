@@ -50,4 +50,6 @@ Main pulling primitive function. Return a plan (list of dictionaries) that conta
         :param name: (util.PoseStamped) Name of plan
         :param t: (util.PoseStamped) list of timestamps associated with each pose
         :param N: (util.PoseStamped) Number of keypoints in the plan (i.e., len(plan_dict['t'])
+        
+Note: All poses are expressed using the custom data type PoseStamped defined in 'helper/util.py'. This is to keep compatibility with rospy. 
    
