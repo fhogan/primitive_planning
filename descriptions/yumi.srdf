@@ -1,0 +1,332 @@
+<?xml version="1.0" ?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="yumi">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="left_arm">
+        <joint name="world_joint" />
+        <joint name="yumi_joint_1_l" />
+        <joint name="yumi_joint_2_l" />
+        <joint name="yumi_joint_7_l" />
+        <joint name="yumi_joint_3_l" />
+        <joint name="yumi_joint_4_l" />
+        <joint name="yumi_joint_5_l" />
+        <joint name="yumi_joint_6_l" />
+        <joint name="yumi_palm_l" />
+        <joint name="yumi_palm_body_l" />
+        <joint name="yumi_tip_l" />
+    </group>
+    <group name="right_arm">
+        <joint name="world_joint" />
+        <joint name="yumi_joint_1_r" />
+        <joint name="yumi_joint_2_r" />
+        <joint name="yumi_joint_7_r" />
+        <joint name="yumi_joint_3_r" />
+        <joint name="yumi_joint_4_r" />
+        <joint name="yumi_joint_5_r" />
+        <joint name="yumi_joint_6_r" />
+        <joint name="yumi_palm_r" />
+        <joint name="yumi_palm_body_r" />
+        <joint name="yumi_tip_r" />
+    </group>
+    <group name="both_arms">
+        <group name="left_arm"/>
+        <group name="right_arm"/>
+    </group>
+
+    <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
+    <virtual_joint name="world_joint" type="fixed" parent_frame="world" child_link="yumi_body" />
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_3_l" reason="Never" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_4_l" reason="Never" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_6_l" reason="Never" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_7_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_link_3_r" reason="Never" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_link_4_r" reason="Never" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_link_6_r" reason="Never" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_link_7_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_body" link2="yumi_link_1_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_body" link2="yumi_link_1_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_1_r" reason="Never" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_2_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_3_l" reason="Never" />
+    <disable_collisions link1="yumi_link_1_r" link2="yumi_link_2_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_1_r" link2="yumi_link_3_r" reason="Never" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_3_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_2_r" link2="yumi_link_3_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_4_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_5_l" reason="Never" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_6_l" reason="Never" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_7_l" reason="Never" />
+    <disable_collisions link1="yumi_link_3_r" link2="yumi_link_4_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_3_r" link2="yumi_link_5_r" reason="Never" />
+    <disable_collisions link1="yumi_link_3_r" link2="yumi_link_6_r" reason="Never" />
+    <disable_collisions link1="yumi_link_3_r" link2="yumi_link_7_r" reason="Never" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_5_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_6_l" reason="Never" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_7_l" reason="Never" />
+    <disable_collisions link1="yumi_link_4_r" link2="yumi_link_5_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_4_r" link2="yumi_link_6_r" reason="Never" />
+    <disable_collisions link1="yumi_link_4_r" link2="yumi_link_7_r" reason="Never" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_6_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_5_r" link2="yumi_link_6_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_7_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_link_6_r" link2="yumi_link_7_r" reason="Adjacent" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_6_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_7_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_palm_body_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_metal_bottom_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_gel_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_tip_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_rail_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_6_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_7_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_metal_bottom_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_gel_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_tip_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_rail_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_6_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_7_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_gel_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_tip_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_rail_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_6_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_7_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_tip_l" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_rail_l" reason="Adjacent" />
+
+    <disable_collisions link1="yumi_palm_r" link2="yumi_link_6_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_link_7_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_palm_body_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_metal_bottom_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_gel_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_tip_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_r" link2="yumi_rail_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_r" link2="yumi_link_6_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_r" link2="yumi_link_7_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_r" link2="yumi_metal_bottom_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_r" link2="yumi_gel_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_r" link2="yumi_tip_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_palm_body_r" link2="yumi_rail_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_r" link2="yumi_link_6_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_r" link2="yumi_link_7_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_r" link2="yumi_gel_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_r" link2="yumi_tip_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_metal_bottom_r" link2="yumi_rail_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_r" link2="yumi_link_6_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_r" link2="yumi_link_7_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_r" link2="yumi_tip_r" reason="Adjacent" />
+    <disable_collisions link1="yumi_gel_r" link2="yumi_rail_r" reason="Adjacent" />
+
+    <!-- Collisions between arms (post-checked) -->
+    <!-- <disable_collisions link1="yumi_palm_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_1_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_link_1_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_2_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_link_2_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_3_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_link_3_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_4_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_link_4_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_5_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_link_5_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_6_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_link_6_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_link_7_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_link_7_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_palm_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_palm_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_palm_body_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_palm_body_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_metal_bottom_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_gel_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_gel_r" reason="Post-check" />
+
+    <disable_collisions link1="yumi_palm_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_1_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_2_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_3_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_4_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_6_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_link_7_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_palm_body_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_gel_l" link2="yumi_tip_r" reason="Post-check" />
+    <disable_collisions link1="yumi_tip_l" link2="yumi_tip_r" reason="Post-check" /> -->
+
+    <!-- <disable_collisions link1="yumi_palm_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_1_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_2_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_3_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_4_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_5_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_6_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_7_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_palm_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_palm_body_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_metal_bottom_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_gel_l" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_tip_l" link2="object" reason="Not real" />
+
+    <disable_collisions link1="yumi_palm_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_1_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_2_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_3_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_4_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_5_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_6_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_link_7_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_palm_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_palm_body_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_metal_bottom_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_gel_r" link2="object" reason="Not real" />
+    <disable_collisions link1="yumi_tip_r" link2="object" reason="Not real" /> -->
+
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_link_7_l" reason="Not real" />
+    <disable_collisions link1="yumi_link_5_r" link2="yumi_link_7_r" reason="Not real" />
+
+    <disable_collisions link1="yumi_link_5_r" link2="yumi_palm_r" reason="Not real" />
+    <disable_collisions link1="yumi_link_5_r" link2="yumi_palm_body_r" reason="Not real" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_palm_l" reason="Not real" />
+    <disable_collisions link1="yumi_link_5_l" link2="yumi_palm_body_l" reason="Not real" />
+</robot>

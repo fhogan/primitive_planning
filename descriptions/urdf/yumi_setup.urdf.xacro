@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot name="yumi" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find config)/descriptions/urdf/materials.xacro" />
+  <!-- Import utilities -->
+  <xacro:include filename="$(find config)/descriptions/urdf/utilities.xacro" />
+  <!--Import the yumi macro -->
+  <xacro:include filename="$(find config)/descriptions/urdf/yumi.xacro"/>
+  <!--Import the yumi servo gripper macro -->
+  <xacro:include filename="$(find config)/descriptions/urdf/yumi_servo_gripper.xacro"/>
+  <!--Import the YuMi GelSlim palm macro -->
+  <xacro:include filename="$(find config)/descriptions/urdf/yumi_gelslim_palm.xacro"/>
+
+  <!-- Fix to world just for testing -->
+  <link name="world"/>
+
+  <!--yumi-->
+  <xacro:yumi name="yumi" hardware_interface="$(arg prefix)" parent="world" limits="experimental">
+    <origin xyz="0 0 0.1" rpy="0 0 0" />
+  </xacro:yumi>
+
+  <xacro:property name="gripper" value="$(arg gripper)" />
+  <xacro:if value="${gripper == 'yumi_gelslim_palm'}">
+    <xacro:yumi_gelslim_palm yumi_name="yumi" arm="r" hardware_interface="$(arg prefix)" parent="yumi_link_7_r">
+      <origin xyz="0 0 0.0" rpy="0 0 0.0" />
+    </xacro:yumi_gelslim_palm>
+
+    <xacro:yumi_gelslim_palm yumi_name="yumi" arm="l" hardware_interface="$(arg prefix)" parent="yumi_link_7_l">
+      <origin xyz="0 0 0.0" rpy="0 0 0.0" />
+    </xacro:yumi_gelslim_palm>
+  </xacro:if>
+
+  <xacro:if value="${gripper == 'yumi_servo_gripper'}">
+    <xacro:yumi_servo_gripper name="gripper_r" hardware_interface="$(arg prefix)" parent="yumi_link_7_r">
+      <origin xyz="0 0 0.007" rpy="0 0 ${PI}" />
+    </xacro:yumi_servo_gripper>
+
+    <xacro:yumi_servo_gripper name="gripper_l" hardware_interface="$(arg prefix)" parent="yumi_link_7_l">
+      <origin xyz="0 0 0.007" rpy="0 0 ${PI}" />
+    </xacro:yumi_servo_gripper>
+  </xacro:if>
+
+  <!-- Table top -->
+  <joint name="yumi_body_to_table_top" type="fixed">
+    <parent link="yumi_body"/>
+    <child link="table_top"/>
+    <origin xyz="0.110910 0 0.0" rpy="0 0 1.57079"/>
+  </joint>
+
+  <link name="table_top">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://config/descriptions/meshes/table/table_top.stl"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+  </link>
+
+  <!-- Table base -->
+  <!-- <joint name="yumi_body_to_table_base" type="fixed">
+    <parent link="yumi_body"/>
+    <child link="table_base"/>
+    <origin xyz="0.333632 -0.250 -0.71" rpy="0 0 1.57079"/>
+  </joint>
+
+  <link name="table_base">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://config/descriptions/meshes/table_complete.stl"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+  </link> -->
+
+</robot>

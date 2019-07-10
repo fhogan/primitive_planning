@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<robot name="yumi" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include Utilities -->
+  <xacro:include filename="$(find config)/descriptions/urdf/utilities.xacro" />
+
+  <!-- some constants -->
+ <!-- <xacro:property name="safety_controller_k_pos" value="100" />
+  <xacro:property name="safety_controller_k_vel" value="2" /> -->
+  <xacro:property name="joint_damping" value="0.5" />
+  <xacro:property name="max_effort" value="300"/>
+
+  <xacro:macro name="yumi_gelslim_palm" params="parent yumi_name arm hardware_interface *origin">
+
+    <!-- Yumi palm -->
+    <joint name="${yumi_name}_palm_${arm}" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${yumi_name}_palm_${arm}"/>
+      <origin xyz="0 0 0.00692" rpy="0 0.0 0.0"/>
+    </joint>
+
+    <link name="${yumi_name}_palm_${arm}">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="2"/>
+        <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://config/descriptions/meshes/mpalm/mpalms_top.stl"/>
+        </geometry>
+        <material name="Red"/>
+      </visual>
+    </link>
+
+    <joint name="${yumi_name}_rail_${arm}" type="fixed">
+      <parent link="${yumi_name}_palm_${arm}"/>
+      <child link="${yumi_name}_rail_${arm}"/>
+      <origin xyz="0 0 0.0" rpy="0 0.0 0.0"/>
+    </joint>
+
+
+    <link name="${yumi_name}_rail_${arm}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://config/descriptions/meshes/mpalm/mpalms_rail.stl"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+    </link>
+
+    <joint name="${yumi_name}_palm_body_${arm}" type="fixed">
+      <parent link="${yumi_name}_palm_${arm}"/>
+      <child link="${yumi_name}_palm_body_${arm}"/>
+      <!-- <limit effort="1000.0" lower="-0.06" upper="0" velocity="0.5"/> -->
+      <origin xyz="0 0 0.0" rpy="0 0.0 0.0"/>
+      <!-- <axis xyz="0 1 0"/> -->
+    </joint>
+
+
+    <link name="${yumi_name}_palm_body_${arm}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://config/descriptions/meshes/mpalm/mpalms_body.stl"/>
+        </geometry>
+        <material name="Red"/>
+      </visual>
+    </link>
+
+    <!-- Yumi metal -->
+    <joint name="${yumi_name}_metal_bottom_${arm}" type="fixed">
+      <parent link="${yumi_name}_palm_body_${arm}"/>
+      <child link="${yumi_name}_metal_bottom_${arm}"/>
+      <origin xyz="0 0 0" rpy="0 0.0 0.0"/>
+    </joint>
+
+    <link name="${yumi_name}_metal_bottom_${arm}">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="2"/>
+        <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://config/descriptions/meshes/mpalm/mpalms_shield.stl"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+    </link>
+
+    <!-- Yumi gel -->
+    <joint name="${yumi_name}_gel_${arm}" type="fixed">
+      <parent link="${yumi_name}_palm_body_${arm}"/>
+      <child link="${yumi_name}_gel_${arm}"/>
+      <origin xyz="0 0 0" rpy="0 0.0 0.0"/>
+    </joint>
+
+    <link name="${yumi_name}_gel_${arm}">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="2"/>
+        <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://config/descriptions/meshes/mpalm/mpalms_gel.stl"/>
+        </geometry>
+        <material name="White"/>
+      </visual>
+    </link>
+
+    <!-- Left tip -->
+    <joint name="${yumi_name}_tip_${arm}" type="fixed">
+      <parent link="${yumi_name}_palm_body_${arm}"/>
+      <child link="${yumi_name}_tip_${arm}"/>
+      <!-- <origin xyz="0 -0.071399 0.12844421" rpy="0 0.0 0.0"/> -->
+      <origin xyz="0 -0.071399 0.14344421" rpy="0 0.0 0.0"/>
+    </joint>
+
+    <link name="${yumi_name}_tip_${arm}"></link>
+
+  </xacro:macro>
+
+</robot>
