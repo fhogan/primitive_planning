@@ -1,12 +1,15 @@
-import fcl
 import os
 import trimesh
 import util
 import copy
 import numpy as np
 
-request = fcl.CollisionRequest()
-result = fcl.CollisionResult()
+try:
+    import fcl
+    request = fcl.CollisionRequest()
+    result = fcl.CollisionResult()
+except Exception as e:
+    print ('[Collisions] Warning (not performing collision avoidance): ', e)
 
 def initialize_collision_object(tris, verts):
     m = fcl.BVHModel()
@@ -22,7 +25,10 @@ def is_collision(body1, body2):
 class CollisionBody():
     def __init__(self, mesh_name = "config/descriptions/meshes/table/table_top_collision.stl"):
         self.trimesh = trimesh.load(mesh_name)
-        self.collision_object = initialize_collision_object(self.trimesh.faces, self.trimesh.vertices)
+        try:
+            self.collision_object = initialize_collision_object(self.trimesh.faces, self.trimesh.vertices)
+        except Exception as e:
+            print('[Collisions] Warning: ', e)
 
     def setCollisionPose(self, collision_object, pose_world):
         T_gripper_pose_world = util.matrix_from_pose(pose_world)

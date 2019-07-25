@@ -1,5 +1,5 @@
 import numpy as np
-import tf
+import transformations
 #~ from geometry_msgs.msg import PoseStamped
 import math
 
@@ -37,7 +37,7 @@ class PoseStamped():
 def get_2d_pose(pose3d):
     #1. extract rotation about z-axis
     T = matrix_from_pose(pose3d)
-    euler_angles_list = tf.transformations.euler_from_matrix(T, 'rxyz')
+    euler_angles_list = transformations.euler_from_matrix(T, 'rxyz')
     pose2d = np.array([pose3d.pose.position.x,
                        pose3d.pose.position.y,
                        euler_angles_list[2],
@@ -72,8 +72,8 @@ def unwrap(angles, min_val=-np.pi, max_val=np.pi):
     return np.array(angles_unwrapped)
 
 def pose_from_matrix(matrix, frame_id="world"):
-    trans = tf.transformations.translation_from_matrix(matrix)
-    quat = tf.transformations.quaternion_from_matrix(matrix)
+    trans = transformations.translation_from_matrix(matrix)
+    quat = transformations.quaternion_from_matrix(matrix)
     pose = list(trans) + list(quat)
     pose = list2pose_stamped(pose, frame_id=frame_id)
     return pose
@@ -138,14 +138,14 @@ def matrix_from_pose(pose):
     pose_list = pose_stamped2list(pose)
     trans = pose_list[0:3]
     quat = pose_list[3:7]
-    T = tf.transformations.quaternion_matrix(quat)
+    T = transformations.quaternion_matrix(quat)
     T[0:3,3] = trans
     return T
 
 def rotate_quat_y(pose):
     '''set orientation of right gripper as a mirror reflection of left gripper about y-axis'''
     quat = pose.pose.orientation
-    R = tf.transformations.quaternion_matrix([quat.x, quat.y, quat.z, quat.w])
+    R = transformations.quaternion_matrix([quat.x, quat.y, quat.z, quat.w])
     z_vec = R[0:3, 2]  # np.cross(x_vec, y_vec)
     y_vec = -R[0:3, 1]  # normal
     x_vec = np.cross(y_vec, z_vec)  # np.array([0,0,-1])
@@ -213,7 +213,7 @@ def interpolate_pose(pose_initial, pose_final, N, frac=1):
                           np.linspace(trans_initial[2], trans_final[2], num=N)]
     pose_interp = []
     for counter in range(int(frac * N)):
-        quat_interp = tf.transformations.quaternion_slerp(quat_initial,
+        quat_interp = transformations.quaternion_slerp(quat_initial,
                                                           quat_final,
                                                           float(counter) / (N-1))
         pose_tmp = [trans_interp_total[0][counter],
@@ -272,7 +272,7 @@ def rotate_local_pose(pose_world, offset):
     angle_x = offset[0]
     angle_y = offset[1]
     angle_z = offset[2]
-    pose_transform_tmp = pose_from_matrix(tf.transformations.euler_matrix(angle_x, angle_y, angle_z, 'sxyz'),
+    pose_transform_tmp = pose_from_matrix(transformations.euler_matrix(angle_x, angle_y, angle_z, 'sxyz'),
                                                 frame_id="tmp")
 
     pose_rotated_world = transform_body(pose_world, pose_transform_tmp)

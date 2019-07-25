@@ -73,7 +73,7 @@ def grasp_planning(object, object_pose1_world, object_pose2_world, palm_pose_l_o
                                 N=10)
     return [lift_plan] + [rotate_plan] + [place_plan]
 
-def levering_planning(object, object_pose1_world, object_pose2_world, palm_pose_l_object, palm_pose_r_object, rotation_center_pose_world=None, anchor_offset=[-0.01,0,0], gripper_name=None, table_name=None):
+def levering_planning(object, object_pose1_world, object_pose2_world, palm_pose_l_object, palm_pose_r_object, rotation_center_pose_world=None, anchor_offset=[-0.01,0,0], gripper_name=None, table_name=None, avoid_collisions=True):
     """
      Main levering primitive function. Return a plan that contains the pose trajectories of the object and palms to achieve desired object reconfiguration.
     :param object: (collisions.CollisionBody) that contains the geometry of the object. If object=None used, collisions will occur between palms and table.
@@ -92,8 +92,9 @@ def levering_planning(object, object_pose1_world, object_pose2_world, palm_pose_
     """
     primitive_name = 'levering'
     N = 100
-    collision_check = collisions.CheckCollisions(gripper_name=gripper_name,
-                                                table_name=table_name)
+    if avoid_collisions:
+        collision_check = collisions.CheckCollisions(gripper_name=gripper_name,
+                                                    table_name=table_name)
     if rotation_center_pose_world is None:
         rotation_center_pose_world = planning_helper.rotation_center_from_object_poses(corners_object=object.trimesh.vertices,
                                                                        object_pose_initial=object_pose1_world,
@@ -153,10 +154,11 @@ def levering_planning(object, object_pose1_world, object_pose2_world, palm_pose_
         palm_pose_l_world = util.offset_local_pose(palm_pose_l_world,
                                                     np.array(anchor_offset))
         #5. Continuously check for collisions between left palm and table (if collision, move palm up)
-        palm_pose_l_world = collision_check.avoid_collision(palm_pose_l_world,
-                                                              arm="l",
-                                                              tol=0.001,
-                                                              axis=[-1, 0, 0])
+        if avoid_collisions:
+            palm_pose_l_world = collision_check.avoid_collision(palm_pose_l_world,
+                                                                  arm="l",
+                                                                  tol=0.001,
+                                                                  axis=[-1, 0, 0])
         palm_poses_list.append([palm_pose_l_world, palm_pose_r_world])
         palm_pose_l_list.append(palm_pose_l_world)
         palm_pose_r_list.append(palm_pose_r_world)
@@ -164,8 +166,8 @@ def levering_planning(object, object_pose1_world, object_pose2_world, palm_pose_
     #6. return final plan
     plan_dict = {}
     plan_dict['palm_poses_world'] = palm_poses_list
-    plan_dict['palm_pose_l_world'] = palm_pose_l_list
-    plan_dict['palm_pose_r_world'] = palm_pose_l_list
+    plan_dict['palm_poses_l_world'] = palm_pose_l_list
+    plan_dict['palm_poses_r_world'] = palm_pose_l_list
     plan_dict['primitive'] = primitive_name
     plan_dict['object_poses_world'] = object_pose_world_list
     plan_dict['name'] = 'rotate_object'
@@ -239,8 +241,8 @@ def pushing_planning(object, object_pose1_world, object_pose2_world, palm_pose_l
     #5. return final plan
     plan_dict = {}
     plan_dict['palm_poses_world'] = palm_poses_world_list
-    plan_dict['palm_pose_l_world'] = palm_pose_l_world_list
-    plan_dict['palm_pose_r_world'] = palm_pose_r_world_list
+    plan_dict['palm_poses_l_world'] = palm_pose_l_world_list
+    plan_dict['palm_poses_r_world'] = palm_pose_r_world_list
     plan_dict['primitive'] = primitive_name
     plan_dict['object_poses_world'] = object_pose_world_list
     plan_dict['name'] = 'push_object'
@@ -308,8 +310,8 @@ def pulling_planning(object, object_pose1_world, object_pose2_world, palm_pose_l
     #5. return final plan
     plan_dict = {}
     plan_dict['palm_poses_world'] = palm_poses_list
-    plan_dict['palm_pose_l_world'] = palm_pose_l_world_list
-    plan_dict['palm_pose_r_world'] = palm_pose_r_world_list
+    plan_dict['palm_poses_l_world'] = palm_pose_l_world_list
+    plan_dict['palm_poses_r_world'] = palm_pose_r_world_list
     plan_dict['primitive'] = primitive_name
     plan_dict['object_poses_world'] = object_pose_world_list
     plan_dict['name'] = 'pull'
@@ -320,18 +322,18 @@ def pulling_planning(object, object_pose1_world, object_pose2_world, palm_pose_l
 if __name__ == '__main__':
 
     #1. pushing plan
-    manipulated_object = None
-    object_pose1_world = util.list2pose_stamped([0.3, -0.2, 0.02, 0, 0, 0.17365,0.98481])
-    object_pose2_world = util.list2pose_stamped([0.4, .1, 0.02, 0, 0, 0.17365,0.98481])
-    palm_pose_r_object = util.list2pose_stamped([0.0, -0.07997008425912933, 0.024995790000000007, 1.0000000000000002, -4.163336342344336e-17, 0.0, 0.0])
-    palm_pose_l_object = util.list2pose_stamped([-0.0672855774812188, -0.2507075560568905, 0.20519579000000004, 0.9554435790175559, 0.10642282670079033, 0.2753110490405191, -0.002361259694729361])
-
-    pushing_plan = pushing_planning(object=manipulated_object,
-                                       object_pose1_world=object_pose1_world,
-                                       object_pose2_world=object_pose2_world,
-                                       palm_pose_l_object=palm_pose_l_object,
-                                       palm_pose_r_object=palm_pose_r_object,
-                                       arm='r')
+    # manipulated_object = None
+    # object_pose1_world = util.list2pose_stamped([0.3, -0.2, 0.02, 0, 0, 0.17365,0.98481])
+    # object_pose2_world = util.list2pose_stamped([0.4, .1, 0.02, 0, 0, 0.17365,0.98481])
+    # palm_pose_r_object = util.list2pose_stamped([0.0, -0.07997008425912933, 0.024995790000000007, 1.0000000000000002, -4.163336342344336e-17, 0.0, 0.0])
+    # palm_pose_l_object = util.list2pose_stamped([-0.0672855774812188, -0.2507075560568905, 0.20519579000000004, 0.9554435790175559, 0.10642282670079033, 0.2753110490405191, -0.002361259694729361])
+    #
+    # plan = pushing_planning(object=manipulated_object,
+    #                                    object_pose1_world=object_pose1_world,
+    #                                    object_pose2_world=object_pose2_world,
+    #                                    palm_pose_l_object=palm_pose_l_object,
+    #                                    palm_pose_r_object=palm_pose_r_object,
+    #                                    arm='r')
     #2. grasping primitive
     # manipulated_object = None
     # object_pose1_world = util.list2pose_stamped([0.4500000000000001, -0.040000000000000056, 0.07145000425107054, 0.4999999999999997, 0.4999999999999997, 0.4999999999999997, 0.5000000000000003])
@@ -339,30 +341,31 @@ if __name__ == '__main__':
     # palm_pose_l_object = util.list2pose_stamped([0.04540000110864631, 0.08145000073187784, 0.0, -4.710277376051325e-16, 1.0458916790526295e-31, -0.7071067811865475, 0.7071067811865476])
     # palm_pose_r_object = util.list2pose_stamped([-0.045400001108646472, 0.07145000073187781, 5.551115123125783e-17, -3.5327080320384923e-16, 1.5700924586837752e-16, 0.7071067811865472, 0.7071067811865477])
     #
-    # grasping_plan = grasp_planning(object=object,
+    # plan = grasp_planning(object=object,
     #                            object_pose1_world=object_pose1_world,
     #                            object_pose2_world=object_pose2_world,
     #                            palm_pose_l_object=palm_pose_l_object,
     #                            palm_pose_r_object=palm_pose_r_object)
 
     #3. levering primitive
-    # import collisions
-    # gripper_name = "/home/francois/mpalms/catkin_ws/src/config/descriptions/meshes/mpalm" + "/mpalms_all_coarse.stl"
-    # table_name = "/home/francois/mpalms/catkin_ws/src/config/descriptions/meshes/table" + "/table_top.stl"
+    # from helper import collisions
+    # gripper_name = "/descriptions/meshes/mpalm" + "/mpalms_all_coarse.stl"
+    # table_name = "/descriptions/meshes/table" + "/table_top.stl"
     #
-    # manipulated_object = collisions.CollisionBody("/home/francois/mpalms/catkin_ws/src/config/descriptions/meshes/objects" + "/realsense_box_experiments.stl")
+    # manipulated_object = collisions.CollisionBody("descriptions/meshes/objects" + "/realsense_box_experiments.stl")
     # object_pose1_world = util.list2pose_stamped([0.4500000000000001, -0.040000000000000056, 0.07145000425107054, 0.4999999999999997, 0.4999999999999997, 0.4999999999999997, 0.5000000000000003])
     # object_pose2_world = util.list2pose_stamped([0.4500000000000001, 0.07685000535971695, 0.04540000110864648, -1.766354016019247e-16, 0.7071067811865475, 7.850462293418875e-17, 0.7071067811865476])
     # palm_pose_l_object = util.list2pose_stamped([0.04540000110864631, 0.08145000073187784, 0.0, -4.710277376051325e-16, 1.0458916790526295e-31, -0.7071067811865475, 0.7071067811865476])
     # palm_pose_r_object = util.list2pose_stamped([-0.045400001108646472, 0.07145000073187781, 5.551115123125783e-17, -3.5327080320384923e-16, 1.5700924586837752e-16, 0.7071067811865472, 0.7071067811865477])
     #
-    # levering_plan = levering_planning(object=manipulated_object,
+    # plan = levering_planning(object=manipulated_object,
     #                                    object_pose1_world=object_pose1_world,
     #                                    object_pose2_world=object_pose2_world,
     #                                    palm_pose_l_object=palm_pose_l_object,
     #                                    palm_pose_r_object=palm_pose_r_object,
-    #                                   gripper_name="/home/francois/mpalms/catkin_ws/src/config/descriptions/meshes/mpalm" + "/mpalms_all_coarse.stl",
-    #                                   table_name="/home/francois/mpalms/catkin_ws/src/config/descriptions/meshes/table" + "/table_top.stl")
+    #                                   gripper_name="descriptions/meshes/mpalm" + "/mpalms_all_coarse.stl",
+    #                                   table_name="descriptions/meshes/table" + "/table_top.stl",
+    #                                   avoid_collisions=False,)
 
     #4. pulling primitive
     manipulated_object = None
@@ -370,27 +373,32 @@ if __name__ == '__main__':
     object_pose2_world = util.list2pose_stamped([0.4, 0.1, 0.026029999560531224, 0.0, 0.0, 0.2588190451025207, 0.9659258262890683])
     palm_pose_l_object = util.list2pose_stamped([0.24468880597338838, 0.5590393007227565, 0.18711189974498546, 0.36391209838571453, 0.877140948669767, -0.14647338311772426, 0.27701496142492954])
     palm_pose_r_object = util.list2pose_stamped([-0.034310268964238944, 0.01420462473093076, 0.032571000439468735, 0.4055797427018062, 0.5792279968284825, 0.5792279968284825, 0.4055797427018062])
-    pulling_plan = pulling_planning(object=manipulated_object,
+    plan = pulling_planning(object=manipulated_object,
                                 object_pose1_world=object_pose1_world,
                                 object_pose2_world=object_pose2_world,
                                 palm_pose_l_object=palm_pose_l_object,
                                 palm_pose_r_object=palm_pose_r_object,
                                  arm='r')
 
+    print ('[Planning]: Plan Computed')
+    for _plan in plan:
+        print ('Plan name: ', _plan['name'])
+        print ('Number of object poses: ', len(_plan['object_poses_world']))
+        print('Number of palm left poses: ', len(_plan['palm_poses_l_world']))
+        print('Number of palm right poses: ', len(_plan['palm_poses_r_world']))
+        print('Variables available: ', _plan.keys())
 
-    is_simulate = True
-    if is_simulate:
-        import simulation
-        import rospy
-
-        rospy.init_node("test")
-        for i in range(10):
-            simulation.visualize_object(object_pose1_world, filepath="package://config/descriptions/meshes/objects/realsense_box_experiments.stl", name="/object_initial",
-                                        color=(1., 0., 0., 1.), frame_id="/yumi_body", scale=(1., 1., 1.))
-            simulation.visualize_object(object_pose2_world, filepath="package://config/descriptions/meshes/objects/realsense_box_experiments.stl", name="/object_final",
-                                        color=(0., 0., 1., 1.), frame_id="/yumi_body", scale=(1., 1., 1.))
-            rospy.sleep(.1)
-        simulation.simulate(pushing_plan)
-        # simulation.simulate(grasping_plan)
-        # simulation.simulate(levering_plan)
-        # simulation.simulate(pulling_plan)
+    # ROS dependence below for visualization
+    # is_simulate = True
+    # if is_simulate:
+    #     import simulation
+    #     import rospy
+    #
+    #     rospy.init_node("test")
+    #     for i in range(10):
+    #         simulation.visualize_object(object_pose1_world, filepath="package://config/descriptions/meshes/objects/realsense_box_experiments.stl", name="/object_initial",
+    #                                     color=(1., 0., 0., 1.), frame_id="/yumi_body", scale=(1., 1., 1.))
+    #         simulation.visualize_object(object_pose2_world, filepath="package://config/descriptions/meshes/objects/realsense_box_experiments.stl", name="/object_final",
+    #                                     color=(0., 0., 1., 1.), frame_id="/yumi_body", scale=(1., 1., 1.))
+    #         rospy.sleep(.1)
+        # simulation.simulate(plan)

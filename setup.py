@@ -5,7 +5,8 @@ setup(name='primitive-planning',
       install_requires=[
           'numpy',  
           'trimesh',
-          'python-fcl',
+          'transformations',
+          'dubins'
       ],
       description='Tactile Dexterity Project',
       author='Francois Hogan',

@@ -1,4 +1,4 @@
-import tf
+import transformations
 import util
 import numpy as np
 
@@ -6,13 +6,13 @@ def get_2d_pose(object_pose):
     T = util.matrix_from_pose(object_pose)
     x = object_pose.pose.position.x
     y = object_pose.pose.position.y
-    euler_angles = tf.transformations.euler_from_matrix(T, 'sxyz')
+    euler_angles = transformations.euler_from_matrix(T, 'sxyz')
     return np.array([x, y, euler_angles[2]])
 
 def get3dpose_object(pose2d, pose3d_nominal):
     x_nom, y_nom, theta_nom = get_2d_pose(pose3d_nominal)
     delta_theta = pose2d[2] - theta_nom
-    T = tf.transformations.euler_matrix(0,0,delta_theta, 'sxyz')
+    T = transformations.euler_matrix(0,0,delta_theta, 'sxyz')
     pose_transform = util.pose_from_matrix(T)
     new_pose = util.transform_pose(pose_source=pose3d_nominal,
                                    pose_transform=pose_transform)
